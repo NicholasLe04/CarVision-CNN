@@ -3,9 +3,10 @@ from PIL import Image
 from tensorflow import keras
 from keras.layers import *
 import matplotlib.pyplot as plt
+import os
 
 def prep_image(image, img_size):
-    image = image.resize((128, img_size))
+    image = image.resize((img_size, img_size))
     image_sequence = image.getdata()
     image_array = np.array(image_sequence)
     image_sequence = image_array
@@ -25,7 +26,8 @@ def load_training_data(data_size:int):
     training_inputs=[]
     training_outputs=[]
 
-    training_dir = 'C:/Users/Nicholas/Documents/Coding/RoadVision/cityscapes_data/train/'
+    # CHANGE THIS
+    training_dir = os.getcwd().replace("\\", "/") + '/cityscapes_data/train/'
 
     for i in range(1, data_size+1):
         image, mask = image_pair_split(training_dir + str(i) + '.jpg')
@@ -41,13 +43,14 @@ def load_testing_data(data_size:int):
     testing_inputs=[]
     testing_outputs=[]
 
-    testing_dir = 'C:/Users/Nicholas/Documents/Coding/RoadVision/cityscapes_data/val/'
+    # CHANGE THIS
+    testing_dir = os.getcwd().replace("\\", "/") + '/cityscapes_data/val/'
 
     for i in range(1, data_size+1):
         image, mask = image_pair_split(testing_dir + str(i) + '.jpg')
 
-        testing_inputs.append(prep_image(image), 128)
-        testing_outputs.append(prep_image(mask), 128)
+        testing_inputs.append(prep_image(image, 128))
+        testing_outputs.append(prep_image(mask, 128))
 
     print ('Testing Data Loaded')
 
@@ -58,25 +61,24 @@ if __name__ == '__main__':
 
     
     
-    model = keras.models.Sequential(
-        [
-            Conv2D(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'),
-            Conv2D(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'),
-            Flatten(),
-            Dense(64, activation='swish'),
-            Dropout(0.2),
-            Dense(64, activation='swish'),
-            Dropout(0.2),
-            Dense(32*32*32, activation='swish'),
-            Reshape((32,32,32)),
-            Conv2DTranspose(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'),
-            Conv2DTranspose(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'),
-            Conv2DTranspose(filters=3, kernel_size=3, activation='sigmoid', padding='same'),
-        ]
-    )
-    training_inputs, training_outputs = load_training_data(1000)
+    model = keras.models.Sequential()
+    model.add(Conv2D(filters=128, kernel_size=3, activation='swish', strides=2, padding='same'))
+    model.add(Conv2D(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'))
+    model.add(Flatten())
+    model.add(Dense(128, activation='swish'))
+    model.add(Dropout(0.2))
+    model.add(Dense(64, activation='swish'))
+    model.add(Dropout(0.2))
+    model.add(Dense(32*32*32, activation='swish'))
+    model.add(Reshape((32,32,32)))
+    model.add(Conv2DTranspose(filters=128, kernel_size=3, activation='swish', strides=2, padding='same'))
+    model.add(Conv2DTranspose(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'))
+    model.add(Conv2DTranspose(filters=3, kernel_size=3, activation='sigmoid', padding='same'))
+        
+    
+    training_inputs, training_outputs = load_training_data(2000)
 
-    testing_inputs, testing_outputs = load_testing_data(200)
+    testing_inputs, testing_outputs = load_testing_data(500)
 
     train_x = np.array(training_inputs)
     test_x = np.array(testing_inputs)
@@ -93,7 +95,7 @@ if __name__ == '__main__':
         save_best_only=True
     )
 
-    history = model.fit(train_x, train_y, validation_data = (test_x, test_y), batch_size=64, epochs=50, callbacks=[model_checkpoint_callback])
+    history = model.fit(train_x, train_y, validation_data = (test_x, test_y), batch_size=32, epochs=50, callbacks=[model_checkpoint_callback])
 
     print(model.summary())
 
