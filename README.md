@@ -6,6 +6,7 @@ DATASET: https://www.kaggle.com/datasets/dansbecker/cityscapes-image-pairs/code
 
 # Samples
 
-![image](https://user-images.githubusercontent.com/103169500/212519486-5b8b462d-cb40-462f-90c6-063da4d757d3.png)
+![image](https://user-images.githubusercontent.com/103169500/212628385-a6f1ac29-025e-4731-9473-428c93f49b04.png)
 
-![image](https://user-images.githubusercontent.com/103169500/212519516-3361e59a-5d9e-4fdc-84c9-f2995f7c51aa.png)
+![image](https://user-images.githubusercontent.com/103169500/212628471-84c3beee-4128-4d8e-9b0a-aa6583d0f43b.png)
+
