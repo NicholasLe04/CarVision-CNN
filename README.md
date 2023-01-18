@@ -1,10 +1,14 @@
 # Car Vision - Convolutional Neural Network
 Convolutional neural networked trained to generate an image mask of cityscape images
 
+## How to use
+- Run ```train.py``` to train the model (Adjust batch size and epochs as needed)
+- Run ```run.py``` to predict (Change the directory of 'input_image' to the desired input image)
+
 ## Resources
 - [Unet Article](https://theaisummer.com/unet-architectures/)
 
-- [Training/Testing Data](https://www.kaggle.com/datasets/dansbecker/cityscapes-image-pairs/code)
+- [Training/Testing Data](https://www.kaggle.com/datasets/dansbecker/cityscapes-image-pairs/)
 
 - [Model Visualization Tool](https://github.com/paulgavrikov/visualkeras)
 
