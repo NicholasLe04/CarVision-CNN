@@ -57,26 +57,47 @@ def load_testing_data(data_size:int):
     return testing_inputs, testing_outputs
 
 
+model = keras.models.Sequential([
+    Conv2D(filters=64, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),    
+    Dropout(0.2), 
+    Conv2D(filters=64, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),          
+    MaxPool2D(),        
+
+    Conv2D(filters=128, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),    
+    Dropout(0.2), 
+    Conv2D(filters=128, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),          
+    MaxPool2D(),    
+
+    Conv2D(filters=256, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),    
+    Dropout(0.2), 
+    Conv2D(filters=256, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),          
+    MaxPool2D(),        
+
+    Conv2D(filters=512, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),    
+    Dropout(0.2), 
+    Conv2D(filters=512, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),           
+
+    Conv2DTranspose(filters=256, kernel_size=(2,2), activation='swish', strides=(2,2), padding='same'),  
+    Conv2D(filters=256, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+    Dropout(0.2),
+    Conv2D(filters=256, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+
+    Conv2DTranspose(filters=128, kernel_size=(2,2), activation='swish', strides=(2,2), padding='same'),  
+    Conv2D(filters=128, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+    Dropout(0.2),
+    Conv2D(filters=128, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+
+    Conv2DTranspose(filters=64, kernel_size=(2,2), activation='swish', strides=(2,2), padding='same'),  
+    Conv2D(filters=64, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+    Dropout(0.2),
+    Conv2D(filters=64, kernel_size=(3,3), activation='swish', kernel_initializer='he_normal', padding='same'),
+
+    Conv2D(3, (1,1), activation='sigmoid')
+])
+
 if __name__ == '__main__':
 
-    
-    
-    model = keras.models.Sequential()
-    model.add(Conv2D(filters=128, kernel_size=3, activation='swish', strides=2, padding='same'))
-    model.add(Conv2D(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'))
-    model.add(Flatten())
-    model.add(Dense(128, activation='swish'))
-    model.add(Dropout(0.2))
-    model.add(Dense(64, activation='swish'))
-    model.add(Dropout(0.2))
-    model.add(Dense(32*32*32, activation='swish'))
-    model.add(Reshape((32,32,32)))
-    model.add(Conv2DTranspose(filters=128, kernel_size=3, activation='swish', strides=2, padding='same'))
-    model.add(Conv2DTranspose(filters=64, kernel_size=3, activation='swish', strides=2, padding='same'))
-    model.add(Conv2DTranspose(filters=3, kernel_size=3, activation='sigmoid', padding='same'))
-        
-    
-    training_inputs, training_outputs = load_training_data(2000)
+    training_inputs, training_outputs = load_training_data(2750)
 
     testing_inputs, testing_outputs = load_testing_data(500)
 
@@ -95,7 +116,7 @@ if __name__ == '__main__':
         save_best_only=True
     )
 
-    history = model.fit(train_x, train_y, validation_data = (test_x, test_y), batch_size=32, epochs=50, callbacks=[model_checkpoint_callback])
+    history = model.fit(train_x, train_y, validation_data = (test_x, test_y), batch_size=16, epochs=75, callbacks=[model_checkpoint_callback])
 
     print(model.summary())
 
