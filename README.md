@@ -6,7 +6,6 @@ Convolutional neural networked trained to generate an image mask of cityscape im
 - Run ```run.py``` to predict (Change the directory of 'input_image' to the desired input image)
 
 ## Resources
-- [Unet Article](https://theaisummer.com/unet-architectures/)
 
 - [Training/Testing Data](https://www.kaggle.com/datasets/dansbecker/cityscapes-image-pairs/)
 
